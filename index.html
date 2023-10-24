@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>SLOT MACHINE</title>
+		<style>
+			body {
+				background-color: #11aaff;
+			}
+			
+			#border {
+				width: 500px;
+				padding: 10px;
+				margin: 50px auto;
+				text-align: center;
+			}
+
+			.contenitore {
+				margin: 0 auto;
+				width: 198px;
+			}
+
+			.slotmachine {
+				width: 64px;
+				height: 64px;
+				float: left;
+				border: 1px dashed black;
+			}
+			
+			.pulsantiera {
+				width: 50%;
+				float: left;
+			}
+			
+			.pulsante {
+				display: inline-block;
+				text-align: center;
+				font-family: sans-serif;
+				color: black;
+				font-size: 12px;
+				background-color: #693F73;
+				border-radius: 24px;
+			}
+			
+			button {
+				display: block;
+				width: 138px;
+				height: 33px;
+				margin: 20px;
+			}
+			
+			#esito {
+				width: 100%;
+				height: 33px;
+				font-family: Arial;
+				font-size: 24px;
+			}
+
+			#stats{
+				display: inline;
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="border">
+			<div class="contenitore">
+				<div class="slotmachine"id="uno"><img  src="mela.png"></div>
+				<div class="slotmachine"id="due"><img  src="mela.png"></div>
+				<div class="slotmachine"id="tre"><img  src="mela.png"></div>
+			</div>
+			<div class="pulsantiera">
+				<button class="pulsante">GIOCA</button>
+			</div>
+			<div class="pulsantiera">
+				<button class="pulsante">STOP</button>
+			</div>
+			<div style="clear:both;"></div>
+			<div id="esito"><!-- Visualizzare qui l'esito della partita --></div>
+			<div id="stats">
+				<div id="tentativi">TENTATIVI</div>
+				<div id="vittorie">VITTORIE</div>
+				<div id="percentuale">PERCENTUALI</div>
+			</div>
+		</div>
+		<script>
+			let frutta = ["mela.png", "ananas.png", "fragola.png", "banana.png", "ciliegia.png"];
+			let timeOut;
+			let start = document.getElementsByClassName("pulsantiera")[0].getElementsByTagName("button")[0];
+			let stopp = document.getElementsByClassName("pulsantiera")[1].getElementsByTagName("button")[0];
+			let tentativi = 0;
+			let vittorie = 0;
+			let percentuale = 0;
+
+			start.addEventListener("click", gioca);
+
+			function gioca(){
+				let slot = document.getElementsByClassName("slotmachine");
+				document.getElementById("esito").style.display = "none";
+				start.disabled = true; 
+				stopp.disabled = false;
+
+				for (let i = 0; i < slot.length; i++) {
+  					let random = Math.floor(Math.random() * frutta.length);
+					let immagini = frutta[random];
+					slot[i].innerHTML = '<img src="' + immagini + '">';
+				}
+				timeOut = setTimeout("gioca()", 250);
+			}
+			
+			stopp.addEventListener("click", fermati);
+
+			function fermati(){
+				clearTimeout(timeOut);
+				tentativi += 1;
+				let uno = document.getElementById("uno").innerHTML;
+				let due = document.getElementById("due").innerHTML;
+				let tre = document.getElementById("tre").innerHTML;
+				start.disabled = false; 
+				stopp.disabled = true;
+				document.getElementById("esito").style.display = "block";
+				document.getElementById("stats").style.display = "block";
+				
+				if(uno == due && uno == tre){
+					document.getElementById("esito").innerText = "HAI VINTO";
+					vittorie +=1;
+					percentuale = parseInt(vittorie / tentativi * 100);
+				}else {
+					document.getElementById("esito").innerText = "HAI PERSO!"
+					percentuale = parseInt(vittorie / tentativi * 100);
+				}
+
+				document.getElementById("tentativi").innerText = "TENTATIVI: " + tentativi;
+				document.getElementById("vittorie").innerText = "VITTORIE: " + vittorie;
+				document.getElementById("percentuale").innerText = "PERCENTUALE: " + percentuale + "%";
+
+				
+
+            	
+
+				
+				
+			}
+
+
+		</script>
+	</body>
+</html>
